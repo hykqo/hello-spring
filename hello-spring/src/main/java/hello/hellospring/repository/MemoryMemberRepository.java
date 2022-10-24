@@ -1,9 +1,10 @@
 package hello.hellospring.repository;
 
 import hello.hellospring.domain.Member;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
-
+@Repository
 public class MemoryMemberRepository implements MemberRepository{
 
     //db가 없으므로 우선 맵에다 저장을 해보자.
