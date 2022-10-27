@@ -1,11 +1,20 @@
 package hello.hellospring.controller;
 
+import hello.hellospring.domain.Member;
+import hello.hellospring.dto.MemberDTO;
 import hello.hellospring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller //해당 애노테이션을 이용하면 스프링이 처음 뜰때 스프링컨테이너라는 통이 생기는데, 해당 컨트롤러 객체를 생성해 스프링에 넣어두고 관리를 해준다.
 //즉 빈을 생성해서 스프링이 관리해주는것이다.
+@RequestMapping("members")
 public class MemberController {
 
     //필드주입 방법 - 안좋음. 스프링뜰때 넣어주기만 하고 중간에 바꿀수 있는 방법이 없다.
@@ -27,4 +36,26 @@ public class MemberController {
     public MemberController(MemberService memberService){
         this.memberService = memberService;
     }
+
+    @GetMapping("new")
+    public String createForm(){
+        return "members/createMemberForm";
+    }
+
+    @PostMapping("new")
+    public String create(MemberDTO memberDTO){
+        Member member = new Member();
+        member.setName(memberDTO.getName());
+        memberService.join(member);
+        return "redirect:/";
+    }
+
+    @GetMapping("")
+    public String list(Model model){
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members);
+        return "members/memberList";
+    }
+
+
 }
